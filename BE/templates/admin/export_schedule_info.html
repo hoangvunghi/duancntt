@@ -1,0 +1,20 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <div, style="margin-bottom: 10px; margin-top: 10px; position: fixed; right: 50%; transform: translateX(50%); border: 1px solid black; padding: 20px;">
+    <h1 style="text-align: center; border-bottom: 1px solid black; text-transform: uppercase; font-size: 20px; font-weight: bold; padding-bottom: 10px; margin-bottom: 20px;">
+      Xuất dữ liệu lịch làm việc
+    </h1>
+    <form action="" method="get">
+      {% csrf_token %}
+      <p style="font-size: 14px; font-weight: bold;">Chọn thời gian xuất dữ liệu:</p>
+      <div style="border-bottom: 1px solid black; margin-bottom: 10px;">
+        {{ form.as_p }} 
+        <p style="color: red; font-size: 12px;">
+          Lưu ý: không tính ngày kết thúc
+        </p>
+      </div>
+      <input type="submit" name="apply" value="Xuất dữ liệu" class="btn btn-primary">
+    </form>
+  </div>
+{% endblock %}

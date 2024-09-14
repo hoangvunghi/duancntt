@@ -1,0 +1,5 @@
+Chạy 3 terminal khác nhau để khởi động celery 
+
+celery -A hrmm beat --loglevel=info
+celery -A hrmm worker --loglevel=info
+python manage.py runserver

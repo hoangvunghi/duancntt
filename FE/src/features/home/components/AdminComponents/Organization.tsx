@@ -76,7 +76,8 @@ export const Organization = () => {
 
                         <img
                             className="absolute right-[10px]"
-                            src="/assets/logo.jpg"
+                            // src="/assets/logo.jpg"
+                            src= "https://thanglong.edu.vn/themes/md_tlu_2/img/logo.svg"
                             alt="logo"
                             style={{ width: '150px' }}
                         />

@@ -4,7 +4,7 @@ from rest_framework import status
 from base.models import Employee,UserAccount
 from .models import TimeSheet,TimesheetTask
 from .serializers import TimeSheetWithUserAccountSerializer, UserAccountWithTimeSheetSerializer,TimeSheetSerializer,TimesheetTaskSerializer
-from base.permissions import IsAdminOrReadOnly,IsOwnerOrReadonly,IsHrAdminManager,IsHrAdmin
+from base.permissions import IsAdminOrReadOnly,IsOwnerOrReadonly,IsHrAdminManager,IsHrAdmin,IsAdmin
 from rest_framework import permissions
 from django.core.paginator import Paginator,EmptyPage
 from django.utils import timezone
@@ -42,7 +42,12 @@ class SetIPAddress(APIView):
     permission_classes=[IsHrAdmin]
     def post(self, request):
         # Lấy địa chỉ IP từ request
-        ip = request.META.get("HTTP_X_FORWARDED_FOR").split(',')[0]
+        ip = request.META.get("HTTP_X_FORWARDED_FOR")
+        if ip:
+            ip = ip.split(',')[0]
+        else:
+            ip = request.META.get("REMOTE_ADDR")
+
         # Đọc giá trị băm đã lưu từ tệp
         try:
             with open("hash_key.txt", "r") as file:
@@ -205,7 +210,11 @@ def get_existing_timesheet_first(emp_id, date):
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def check_in(request):
     try:
-        client_ip = request.META.get('HTTP_X_FORWARDED_FOR').split(',')[0]
+        client_ip = request.META.get('HTTP_X_FORWARDED_FOR')
+        if client_ip:
+            client_ip = client_ip.split(',')[0]
+        else:
+            client_ip = request.META.get('REMOTE_ADDR')
     except AttributeError:
         return Response({"error": "No IP address found", "status": status.HTTP_404_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
     with open("hash_key.txt", "r") as file:
@@ -302,7 +311,11 @@ from datetime import datetime, time
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def check_out(request):
-    client_ip = request.META.get('HTTP_X_FORWARDED_FOR').split(',')[0]
+    client_ip = request.META.get('HTTP_X_FORWARDED_FOR')
+    if client_ip:
+        client_ip = client_ip.split(',')[0]
+    else:
+        client_ip = request.META.get('REMOTE_ADDR')
     hash_ip = hash_string(client_ip)
     
     with open("hash_key.txt", "r") as file:
@@ -403,7 +416,9 @@ def check_out(request):
 
 
 @api_view(["GET"])
-@permission_classes([IsAdminOrReadOnly])
+# @permission_classes([IsAdminOrReadOnly,IsHrAdminManager])
+# ai đăng nhập cũng xem được
+@permission_classes([IsAdmin])
 def list_timesheet_raw(request):
     from_date = request.GET.get('from')
     to_date = request.GET.get('to')

@@ -623,7 +623,7 @@ def validate_to_update_account(obj, data):
     return errors 
 
 @api_view(['PATCH'])
-@permission_classes([permissions.IsAuthenticatedOrReadOnly, IsAdminOrReadOnly])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly, IsAdmin])
 def update_account(request, pk):
     try:
         employee = UserAccount.objects.get(EmpID=pk)
@@ -750,7 +750,7 @@ def query_employee(request):
 
 
 @api_view(["GET"])
-@permission_classes([IsHrAdmin, IsMe, IsHrAdminManager])
+@permission_classes([IsHrAdmin, IsMe, IsHrAdminManager,IsAdmin])
 def list_employee(request):
     page_index = request.GET.get('pageIndex', 1)
     page_size = request.GET.get('pageSize', 10)
@@ -883,8 +883,9 @@ def delete_data_if_user_quitte(EmpID):
                         status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(["GET"])
-@permission_classes([IsAdminOrReadOnly])
+@permission_classes([IsAdmin,IsHrAdmin])
 def list_user_password(request):
+    
     page_index = request.GET.get('pageIndex', 1)
     page_size = request.GET.get('pageSize', 10)
     order_by = request.GET.get('sort_by', 'UserID')  

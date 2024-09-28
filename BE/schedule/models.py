@@ -20,9 +20,19 @@ class WorkShift(models.Model):
     def __str__(self):
         return self.WorkShiftName  
     
+    class Meta:
+        verbose_name = 'Ca làm việc'
+        verbose_name_plural = 'Ca làm việc'
+        ordering = ['WorkShiftName']
+    
 class Schedule(models.Model):
     EmpID=models.ForeignKey(Employee,on_delete=models.CASCADE)
     Date=models.DateField()
     WorkShift=models.ForeignKey(WorkShift,null=True,on_delete=models.SET_NULL)
+
+    class Meta:
+        verbose_name = 'Lịch làm việc'
+        verbose_name_plural = 'Lịch làm việc'
+        ordering = ['EmpID']
 
 

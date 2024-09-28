@@ -2,7 +2,7 @@ from datetime import datetime,timedelta
 from django.http import Http404
 from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
-from base.permissions import IsAdminOrReadOnly,IsHrAdmin
+from base.permissions import IsAdminOrReadOnly,IsHrAdmin,IsAdmin
 from .models import WorkShift, ConfigSchedule, Schedule
 from rest_framework.pagination import PageNumberPagination
 from .serializers import WorkShiftSerializer, ConfigScheduleSerializer, ScheduleSerializer,ScheduleListSerializer
@@ -62,7 +62,7 @@ class WorkShiftAPIView(BaseAPIView):
 
 class ConfigScheduleAPIView(BaseAPIView):
     queryset = ConfigSchedule.objects.all()
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsAdmin]
     serializer_class = ConfigScheduleSerializer
 
     def create(self, request, *args, **kwargs):
@@ -129,7 +129,6 @@ class ScheduleAPiView(BaseAPIView):
             date = datetime.strptime(date, "%Y-%m-%d")
             next_sunday = current_time + timedelta(days=(6 - current_time.weekday()) )
             next_sunday_lock_time = datetime.combine(next_sunday.date(), lock_time)
-            print(next_sunday_lock_time)
             if date >= next_sunday_lock_time:
                 try:
                     existing_record = Schedule.objects.get(Date=date, EmpID=emp_id)

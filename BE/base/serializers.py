@@ -6,16 +6,6 @@ from .models import Employee,UserAccount
 from job.models import Job
 from department.models import Department
 
-# UserAccount=get_user_model()
-# class JobSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Job
-#         fields = ('JobName',)
-
-# class DepartmentSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Department
-#         fields = ('DepName',)
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
@@ -29,13 +19,6 @@ class EmployeeCreateSerializer(serializers.ModelSerializer):
         fields="__all__"
         # fields=["EmpID","EmpName"]
 
-# class EmployeeSerializerData(serializers.ModelSerializer):
-#     Job = JobSerializer()
-#     Department = DepartmentSerializer()
-
-#     class Meta:
-#         model = Employee
-#         fields = ('EmpID', 'EmpName', 'Phone', 'HireDate', 'BirthDate', 'Address', 'PhotoPath', 'Email', 'EmpStatus', 'Job', 'Department')
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

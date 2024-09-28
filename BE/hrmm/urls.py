@@ -26,8 +26,6 @@ def home(request):
 urlpatterns += [
     path('',home),
     path('admin/', admin.site.urls),
-    # path('auth/',include('djoser.urls')),
-    # path('auth/',include('djoser.urls.jwt')),
     path('',include('base.urls')),
     path('',include('department.urls')),
     path('',include('leave.urls')),
@@ -35,14 +33,7 @@ urlpatterns += [
     path('',include('timesheet.urls')),
     path('',include('job.urls')),
     path('',include('schedule.urls')),
-    # path('hr_admin/', hr_admin_site.urls),  
-    # url("api/", schema_view)
-    # path("organization/",include('organization.urls')),
-    # path("",include('salary.urls')),
     path("api/schema/",SpectacularAPIView.as_view(),name="schema"),
     path("docs/",SpectacularSwaggerView.as_view(url_name="schema")),
-    # path('project/', include('project.urls')),
     path("",include("role.urls")),
-
-    # path('', schema_view),
 ]

@@ -31,6 +31,10 @@ class Employee(models.Model):
 
     def __str__(self):
         return self.EmpName
+    class Meta:
+        verbose_name = 'Nhân viên'
+        verbose_name_plural = 'Nhân viên'
+        ordering = ['EmpID']
 
 
 class UserAccountManager(BaseUserManager):
@@ -88,7 +92,12 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     def is_system_admin(self, request):
         return self.EmpID.RoleID.RoleName == ['Admin', 'CEO']
+    class Meta:
+        verbose_name = 'Tài khoản người dùng'
+        verbose_name_plural = 'Tài khoản người dùng'
+        ordering = ['UserID']
 
+        
 class Project(models.Model): 
     proj_id = models.AutoField(primary_key=True)
     proj_name = models.CharField(max_length=20)

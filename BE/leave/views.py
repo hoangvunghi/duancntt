@@ -5,7 +5,7 @@ from base.models import Employee
 from .models import LeaveRequest
 from .serializers import LeaveSerializer,EmployeeWithLeaveSerializer,LeaveWithEmployeeSerializer
 from rest_framework import permissions
-from base.permissions import IsAdminOrReadOnly, IsOwnerOrReadonly,IsHrAdminManager,IsHrAdmin
+from base.permissions import IsAdminOrReadOnly, IsOwnerOrReadonly,IsHrAdminManager,IsHrAdmin,IsAdmin
 from base.views import obj_update
 from django.core.paginator import Paginator,EmptyPage
 from leave_type.models import LeaveType
@@ -234,7 +234,7 @@ def obj_update(obj, validated_data):
     obj.save()
 
 @api_view(['PATCH'])
-@permission_classes([permissions.IsAuthenticatedOrReadOnly, IsAdminOrReadOnly,IsHrAdminManager])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly,IsHrAdminManager,IsAdmin])
 def update_leave(request, pk):
     try:
         leave = LeaveRequest.objects.get(LeaveRequestID=pk)
@@ -359,7 +359,7 @@ def create_leave(request):
     duration = (leave_end_date - leave_start_date).days + 1
 
     if duration > remaining_leave_days:
-        return Response({"error": "Not enough remaining leave days for this leave type"},
+        return Response({"error": "Đã hết thời gian nghỉ phép cho phép. Vui lòng thử lại!"},
                         status=status.HTTP_400_BAD_REQUEST)
 
     leave_request_data = {

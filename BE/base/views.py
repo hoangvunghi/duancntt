@@ -93,8 +93,6 @@ def forgot_password_view(request):
         return Response({"message": "UserAccount not found for the provided Employee"},
                         status=status.HTTP_404_NOT_FOUND)
     try:
-        # refresh = RefreshToken.for_user(user)
-        # # reset_token = str(refresh.access_token)
         data={"UserID":user.UserID}
         token=dumps(data, key=settings.SECURITY_PASSWORD_SALT)
 
@@ -143,38 +141,6 @@ def reset_password_view(request, token):
                      "status": status.HTTP_200_OK},
                     status=status.HTTP_200_OK)
 
-# @api_view(["POST"])
-# def user_register_view(request):
-#     if request.method == "POST":
-#         serializer = UserRegisterSerializer(data=request.data)
-#         data = {}
-#         username = request.data.get('username', '').lower()
-#         password = request.data.get('password', '')
-#         email=request.data.get("email","").lower()
-#         if not username:
-#             return Response('Username is required')
-#         if not password:
-#             return Response('Password is required')
-#         if not email:
-#             return Response("Email is required")
-#         email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
-#         if not re.match(email_regex, email):
-#             return Response("Invalid email format.")
-#         if serializer.is_valid():
-#             account = serializer.save()
-            
-#             data['response'] = 'Account has been created'
-#             data['username'] = account.username
-#             data['email'] = account.email
-
-#             refresh = RefreshToken.for_user(account)
-#             data['token'] = {
-#                 'refresh': str(refresh),
-#                 'access': str(refresh.access_token)
-#             }
-#         else:
-#             data = serializer.errors
-#         return Response(data)
 @api_view(["POST"])
 def user_login_view(request):
     if request.method == "POST":
@@ -238,7 +204,6 @@ def user_login_view(request):
                 except Department.DoesNotExist:
                     data["DepName"] = None
 
-                # Assuming employee_data is a dictionary, not a list
                 employee_data.update(data)
 
                 response_data = {
@@ -251,14 +216,6 @@ def user_login_view(request):
                     "status": status.HTTP_200_OK,
                 }
                 response = Response(response_data, status=status.HTTP_200_OK)
-
-
-                try:
-                    set_cookie(response, 'token', access_token, request.get_host(), days_expire=3)
-                    response.data['message'] = 'Đã set cookie thành công cho domain .whiteneurons.com'
-                    response.data['token_'] = access_token
-                except Exception as e:
-                    response.data['message'] = str(e)
 
                 return response
             else:
@@ -304,11 +261,10 @@ def reset_employee_password(request, pk):
                      "status": status.HTTP_200_OK},
                     status=status.HTTP_200_OK)
 def strong_password(password):
-    # Ensure password is at least 8 characters long and contains at least one uppercase letter
-    print(password)
     if len(password) < 8 or not re.search(r'[A-Z]', password):
         return False
     return True
+
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadonly])
 def change_password(request, pk):
@@ -396,8 +352,6 @@ def delete_employee(request, pk):
         return Response({"message": "Employee deleted successfully",
                          "status":status.HTTP_200_OK}, 
                         status=status.HTTP_200_OK)
-
-
 
 def is_valid_type(request): 
     errors = {}
@@ -500,7 +454,6 @@ def create_employee(request):
                              "status": status.HTTP_400_BAD_REQUEST},
                             status=status.HTTP_400_BAD_REQUEST)
     if serializer.is_valid():
-        # serializer.validated_data['RoleID'] = role.RoleID
         employee = serializer.save()
         emp_id = employee.EmpID
         if not UserAccount.objects.filter(EmpID=emp_id).exists():
@@ -523,11 +476,11 @@ def create_employee(request):
 
             employee_email = employee.Email
             employee_name = employee.EmpName
-            email_subject = "Chào mừng đến với WhiteNeuron"
+            email_subject = "Chào mừng đến với Lớp dự án Công nghệ thông tin"
             email_message = f" Xin chào {employee_name},\n\n"
             email_message += f" Tài khoản của bạn đã được kích hoạt thành công trong hệ thống.\n"
             email_message += f"\tUsername: {new_user_id}\n"
-            email_message += f"\tPassword: {password}\n\n"  # Đặt mật khẩu mặc định
+            email_message += f"\tPassword: {password}\n\n" 
             email_message += f"Truy cập trang web {settings.BACKEND_URL}/login\n"
             email_message += "\n\n*Đây là email từ hệ thống đề nghị không reply."
 
@@ -548,9 +501,6 @@ def create_employee(request):
     return Response({"error": serializer.errors, "status": status.HTTP_400_BAD_REQUEST},
                     status=status.HTTP_400_BAD_REQUEST)
 
-
-
-
 def validate_to_update(obj, data):
     errors={}
     date_fields = ['HireDate', 'BirthDate']
@@ -566,7 +516,6 @@ def validate_to_update(obj, data):
                 errors[key]= f"amount must be float"     
         if key in date_fields:
             try:
-                # Chuyển đổi định dạng ngày/tháng/năm thành năm-tháng-ngày
                 day, month, year = map(int, value.split('/'))
                 data[key] = f"{year:04d}-{month:02d}-{day:02d}"
             except (ValueError, IndexError):
@@ -664,7 +613,6 @@ def update_employee(request, pk):
                                 "status": status.HTTP_400_BAD_REQUEST},
                                 status=status.HTTP_400_BAD_REQUEST)
 
-
         new_email = request.data.get('Email', '')
         email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
         if new_email and not re.match(email_regex, new_email):
@@ -713,8 +661,6 @@ def update_employee(request, pk):
         return Response({"messeger": "update succesfull", "data":serialized_data,"status":status.HTTP_200_OK},
                         status=status.HTTP_200_OK)    
 
-        
-        
 @api_view(["GET",])
 @permission_classes([IsAdminOrReadOnly])
 def find_employee(request):
@@ -727,8 +673,6 @@ def find_employee(request):
     return Response({'data': employee_data,
                      "status": status.HTTP_200_OK},
                     status=status.HTTP_200_OK)
-
-
 
 @api_view(["GET"])
 @permission_classes([IsHrAdmin])
@@ -747,7 +691,6 @@ def query_employee(request):
         "data": serialized_data,
         "status": status.HTTP_200_OK,
     }, status=status.HTTP_200_OK)
-
 
 @api_view(["GET"])
 @permission_classes([IsHrAdmin, IsMe, IsHrAdminManager,IsAdmin])
@@ -795,7 +738,6 @@ def list_employee(request):
     employees = employees.order_by(order_by)
     serialized_data = []
     total_employees = employees.count()
-    employeelist=Employee.objects.all()
     for employee_data in employees:
         serializer = EmployeeSerializer(employee_data)
         data = serializer.data
@@ -846,7 +788,6 @@ def list_employee(request):
         return Response({"error": f"Invalid value for items_per_page. Allowed values are: {', '.join(map(str, allowed_values))}.",
                          "status": status.HTTP_400_BAD_REQUEST},
                         status=status.HTTP_400_BAD_REQUEST)
-
     
     paginator = Paginator(employees, page_size)
 
@@ -863,6 +804,7 @@ def list_employee(request):
         "data": serialized_data,
         "status": status.HTTP_200_OK,
     }, status=status.HTTP_200_OK)
+
 def delete_data_if_user_quitte(EmpID):
     try:
         user = Employee.objects.get(EmpID=EmpID)
@@ -885,7 +827,6 @@ def delete_data_if_user_quitte(EmpID):
 @api_view(["GET"])
 @permission_classes([IsAdmin,IsHrAdmin])
 def list_user_password(request):
-    
     page_index = request.GET.get('pageIndex', 1)
     page_size = request.GET.get('pageSize', 10)
     order_by = request.GET.get('sort_by', 'UserID')  

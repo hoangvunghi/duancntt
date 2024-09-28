@@ -6,3 +6,8 @@ class Job(models.Model):
     JobName = models.CharField(max_length=255)
     DepID=models.ForeignKey(Department,on_delete=models.SET_NULL,null=True,blank=True)
     Descriptions=models.CharField(max_length=1000,null=True)
+
+    class Meta:
+        verbose_name = 'Công việc'
+        verbose_name_plural = 'Công việc'
+        ordering = ['JobID']

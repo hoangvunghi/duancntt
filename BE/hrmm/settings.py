@@ -28,16 +28,6 @@ SECRET_KEY = 'django-insecure-jdpf2v1-4x!m&v)f!x%2z0u22)^si=i4h7t21vivl^^2%3#w0%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = [
-#     # '192.168.1.18',
-#     '127.0.0.1',
-#     # '192.168.1.17',
-#     # ".vercel.app",
-#     'localhost',
-#     'api-hrm.whiteneurons.com',
-#     # '192.168.50.197',
-# ]
-
 ALLOWED_HOSTS = ['*']
 
 # Application definition
@@ -89,7 +79,6 @@ MIDDLEWARE = [
 ]
 CSRF_TRUSTED_ORIGINS = [' https://hrmbe.onrender.com',
                         'https://www.hrmbe.onrender.com',
-                        "https://api-hrm.whiteneurons.com",
                         ]
 
 ROOT_URLCONF = 'hrmm.urls'
@@ -122,34 +111,15 @@ TEMPLATES = [
 CSRF_COOKIE_SECURE = True  
 WSGI_APPLICATION = 'hrmm.wsgi.application'
 CORS_ALLOWED_ORIGINS = [
-    "https://hr.whiteneurons.com",
     "http://localhost:5173",
-    "http://13.229.74.15:5000",
-    # "http://13.229.74.15:5000",
-    "https://api-hrm.whiteneurons.com",
     
 ]
 SECURITY_PASSWORD_SALT = "abcd"
-# BACKEND_URL = "https://hr.whiteneurons.com"
 BACKEND_URL = "http://localhost:5173"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'wnhrm',
-#         'USER': 'wn_admin',
-#         'PASSWORD':'WNADMIN2024&',
-#         'HOST': 'localhost',
-#         'PORT': '5432', 
-#         # 'NAME': 'hrm',
-#         # 'USER': 'postgres',
-#         # 'PASSWORD':'123456',
-#         # 'HOST': 'localhost',
-#         # 'PORT': '5432', 
-#     }}
 
 # database sqlite3
 if DEBUG:
@@ -220,25 +190,7 @@ EMAIL_USE_TLS = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# #gửi email xác thực bằng djoser
-# DJOSER={
-#     'LOGIN_FIELD':'email',
-#     'USER_CREATE_PASSOWRD_RETYPE':True,
-#     'USERNAME_CHANGED_EMAIL_CONFIRMATION':True,
-#     'PASSWORD_CHANGED_EMAIL_CONFIRMATION':True,
-#     'SEND_CONFIRMATION_EMAIL':True,
-#     'SET_USERNAME_RETYPE':True,
-#     'SET_PASSWORD_RETYPE':True,
-#     'PASSWORD_RESET_CONFIRM_URL':'/password/reset/{uid}/{token}',
-#     'USERNAME_RESET_CONFIRM_URL':'/email/reset/{uid}/{token}',
-#     'ACTIVATION_URL':'/activate/{uid}/{token}',
-#     'SEND_ACTIVATION_EMAIL':True,
-#     'SERIALIZERS':{
-#         'user_create':'base.serializers.UserRegisterSerializer',
-#         'user':'base.serializers.UserRegisterSerializer',
-#         'user_delete':'djoser.serializers.UserDeleteSerializer',
-#     }
-# }
+
 REST_FRAMEWORK = {
     # 'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -271,22 +223,6 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
 }
 ALLOW_EDIT_BY_ADMIN_ONLY = True
-# from celery.schedules import crontab
-
-# CELERY_BROKER_URL = 'redis://localhost:6379/0'
-# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-# CELERY_ACCEPT_CONTENT = ['json']
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
-# CELERY_TIMEZONE = 'Asia/Bangkok'
-# CELERY_BEAT_SCHEDULE = {
-#     'send-birthday-wishes-every-day': {
-#         'task': 'base.tasks.task_send_birthday_wishes',
-#         'schedule': crontab(hour=0, minute=0),  # Chạy task hàng ngày lúc 00:00
-#     },
-# }
-# CELERY_IMPORTS=("base.tasks",)
-
 
 REST_AUTH = {
     'USE_JWT': True,

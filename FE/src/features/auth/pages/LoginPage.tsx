@@ -98,7 +98,7 @@ export function LoginPage() {
 
     const gmailForm = useForm<GmailForm>({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        resolver: yupResolver(gmail_schema)  as Resolver<GmailForm, any>,
+        resolver: yupResolver(gmail_schema) as Resolver<GmailForm, any>,
     });
     return (
         <>
@@ -111,7 +111,7 @@ export function LoginPage() {
                     <div className="relative z-20 flex items-center  font-medium">
                         <img
                             // src="/assets/logo-white.png"
-                            src = "https://thanglong.edu.vn/themes/md_tlu_2/img/logo.svg"
+                            src="https://thanglong.edu.vn/themes/md_tlu_2/img/logo.svg"
                             // alt="logo-white-neuron"
                             alt=""
                             className="w-[300px]"
@@ -122,7 +122,7 @@ export function LoginPage() {
                             <p className="text-lg">
                                 &ldquo;Đây là trang đăng nhập.&rdquo;
                             </p>
-                            <footer className="text-sm">Hoàng Vũ Nghị - Nguyễn Hà Anh</footer>
+                            <footer className="text-sm">Hoàng Vũ Nghị - Nguyễn Hà Anh - Phạm Xuân Vũ</footer>
                         </blockquote>
                     </div>
                 </div>
